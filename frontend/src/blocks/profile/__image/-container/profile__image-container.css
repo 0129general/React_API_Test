@@ -1,0 +1,11 @@
+.profile__image-container {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    margin-right: 28px;
+}
+
+.profile__image-container:hover .profile__image-edit {
+    opacity: 1;
+    cursor: pointer;
+}

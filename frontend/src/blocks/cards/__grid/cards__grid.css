@@ -1,0 +1,30 @@
+.cards__grid {
+    display: grid;
+    background-color: #000000;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 18px;
+    grid-row-gap: 21px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+@media screen and (max-width: 930px) {
+  .cards__grid {
+    grid-template-columns: 282px 282px;
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .cards__grid {
+    grid-template-columns: 282px;
+    grid-row-gap: 20px;
+  }
+}
+@media screen and (max-width: 375px) {
+  .cards__grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

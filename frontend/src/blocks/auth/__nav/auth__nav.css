@@ -1,0 +1,8 @@
+.auth__nav {
+  font-size: 14px;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,19 @@
+.form__open-image {
+    border: 0;
+    padding: 0;
+    box-shadow: unset;
+    border-radius: 0;
+    background-color: unset;
+    /* align-items: start; */
+    position: relative;
+    /* z-index: 2; */
+    max-width: 75vw;
+    max-height: 75vh;
+    margin: auto;
+}
+
+@media screen and (max-width: 650px) {
+  .form__open-image {
+    justify-content: center;
+  }
+}

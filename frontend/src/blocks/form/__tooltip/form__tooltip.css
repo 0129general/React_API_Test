@@ -1,0 +1,12 @@
+@import url('./_error/form__tooltip_error.css');
+@import url('./_success/form__tooltip_success.css');
+@import url('./-message/form__tooltip-message.css');
+
+.form__tooltip {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    background-position: center;
+    background-size: cover;
+    margin: 24px auto 0;
+}

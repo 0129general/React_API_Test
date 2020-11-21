@@ -1,0 +1,25 @@
+.card__like-button {
+    margin-bottom: 3px;
+    background-color: #ffffff;
+    background-image: url('../../../images/heart.svg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border: 0;
+    height: 18px;
+    width: 20px;
+    padding: 0;
+    /* cursor: pointer;
+    display: flex;
+    align-items: center; */
+}
+
+.card__like-button:hover {
+  opacity: .6;
+  cursor: pointer;
+}
+
+/* @media screen and (max-width: 420px) {
+    .card__like-button {
+      margin-right: 30px;
+    }
+} */

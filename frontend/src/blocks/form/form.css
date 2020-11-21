@@ -1,0 +1,37 @@
+@import url(./__container/form__container.css);
+@import url(./__reset-button/form__reset-button.css);
+@import url(./__header/form__header.css);
+@import url(./__fields/form__fields.css);
+@import url(./__input/form__input.css);
+@import url(./__submit-button/form__submit-button.css);
+@import url(./__add-image/form__add-image.css);
+@import url(./__image/form__image.css);
+@import url(./__image-title/form__image-title.css);
+@import url(./__open-image/form__open-image.css);
+@import url(./__input/-error/form__input-error.css);
+@import url(./__input/_type_error/form__input_type_error.css);
+@import url(./__submit-button/_disabled/form__submit-button_disabled.css);
+@import url(./__input/-error_visible/form__input-error_visible.css);
+@import url(./__fields/-delete/form__fields-delete.css);
+@import url(./__tooltip/form__tooltip.css);
+@import url(./__submit-button/_dark/form__submit-button_dark.css);
+@import url(./__input/-dark/form__input-dark.css);
+
+.form {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  background-color: #0000007a;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility .3s, opacity .3s linear;
+  z-index: 1;
+}
+.form_visible {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+}
