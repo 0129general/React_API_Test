@@ -2,7 +2,7 @@
 
 - Part of the [Practicum by Yandex](https://practicum.yandex.com/) Web Development Bootcamp Curriculum.
 
-The project takes [the last](https://lindakovacs.github.io) from React using the Create React App to Express NodeJs implementing the API in the backend.
+The project takes [the last](https://github.com/lindakovacs/around-react) from React using the Create React App to Express NodeJs implementing the API in the backend.
 
 The previous project takes [the one before](https://lindakovacs.github.io/web_project_4/) from vanilla JS to React using the Create React App.
 
