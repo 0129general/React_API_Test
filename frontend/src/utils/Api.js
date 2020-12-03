@@ -9,105 +9,153 @@ class Api {
   }
 
   // Load Cards from the Server
-  getInitialCards() {
+  getInitialCards(token) {
     return fetch(`${this._baseUrl}/cards`, {
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      )
-      .catch((err) => {
-        console.log(err);
+      // .then((res) =>
+      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
+      // )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
       });
+      // .catch((err) => {
+      //   console.log(err);
+      // });
   }
 
   // Load User Information from the Server
-  getUserInfo() {
+  getUserInfo(token) {
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      )
-      .catch((err) => {
-        console.log(err);
+      // .then((res) =>
+      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
+      // )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
       });
+      // .catch((err) => {
+      //   console.log(err);
+      // });
   }
 
   // Update Profile Picture
-  updateAvatar(imageLink) {
+  updateAvatar(imageLink, token) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
-      headers: this._headers,
-      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      method: 'PATCH',
       body: JSON.stringify({ avatar: imageLink }),
     })
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      )
-      .catch((err) => {
-        console.log(err);
+      // .then((res) =>
+      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
+      // )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
       });
+      // .catch((err) => {
+      //   console.log(err);
+      // });
   }
 
   // Edit Profile
-  updateProfile(name, about) {
+  updateProfile({name, about}, token) {
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers,
-      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      method: 'PATCH',
       body: JSON.stringify({ name, about }),
     })
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      )
-      .catch((err) => {
-        console.log(err);
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
       });
+      // .catch((err) => {
+      //   console.log(err);
+      // });
   }
 
   // Add New Card
-  addNewCard(data) {
+  addNewCard(data, token) {
     return fetch(`${this._baseUrl}/cards`, {
-      headers: this._headers,
-      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      method: 'POST',
       body: JSON.stringify({
         name: data.title,
         link: data.link,
       }),
     })
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      )
-      .catch((err) => {
-        console.log(err);
+      // .then((res) =>
+      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
+      // )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
       });
+      // .catch((err) => {
+      //   console.log(err);
+      // });
   }
 
   // Delete Card
-  deleteCard(cardId) {
+  deleteCard(cardId, token) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
-      headers: this._headers,
-      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      method: 'DELETE',
     })
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      )
-      .catch((err) => {
-        console.log(err);
-      });
+      // .then((res) =>
+      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
+      // )
+      // .catch((err) => {
+      //   console.log(err);
+      // });
   }
 
   // Add and Remove Likes
-  changeLikeCardStatus(cardId, isLiked) {
+  changeLikeCardStatus(cardId, isLiked, token) {
     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-      headers: this._headers,
-      method: isLiked ? "DELETE" : "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      method: isLiked ? 'DELETE' : 'PUT',
     })
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      )
-      .catch((err) => {
-        console.log(err);
+      // .then((res) =>
+      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
+      // )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
       });
+      // .catch((err) => {
+      //   console.log(err);
+      // });
   }
 }
 
@@ -116,7 +164,7 @@ class Api {
   //   if (isLiked) {
   //     //unlike heart button
   //     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-  //       method: "DELETE",
+  //       method: 'DELETE',
   //       headers: this._headers,
   //     })
   //       .then((res) => {
@@ -131,7 +179,7 @@ class Api {
   //   } else {
   //     //like heart button
   //     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-  //       method: "PUT",
+  //       method: 'PUT',
   //       headers: this._headers,
   //     })
   //       .then((res) => {
@@ -148,12 +196,13 @@ class Api {
 // }
 
 const api = new Api({
-  // baseUrl: "https://around.nomoreparties.co/v1/group-2",
-  baseUrl: 'https://localhost:3001',
-  headers: {
-    Authorization: 'd38c3eff-8aa3-43a2-86b1-ec6a6fc8a616',
-    'Content-Type': 'application/json',
-  },
+  // baseUrl: 'https://around.nomoreparties.co/v1/group-2',
+  baseUrl: 'http://localhost:3001',
+  // headers: {
+  //   // Authorization: 'd38c3eff-8aa3-43a2-86b1-ec6a6fc8a616',
+  //   'Content-Type': 'application/json',
+  //   Authorization: `Bearer ${token}`,
+  // },
 });
 
 export default api;

@@ -31,6 +31,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [registered, setRegistered] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const history = useHistory();
 
@@ -70,24 +71,37 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function handleUpdateAvatar({ avatar }) {
-    api
-      .updateAvatar(avatar)
-      .then((updateProfile) => {
-        setCurrentUser(updateProfile);
-        setIsEditAvatarPopupOpen(false);
-      })
-      .then((res) => closeAllPopups())
-      .catch((err) => console.log(err));
-  }
+  // function handleUpdateAvatar({ avatar }) {
+  //   api
+  //     .updateAvatar(avatar)
+  //     .then((updateProfile) => {
+  //       setCurrentUser(updateProfile);
+  //       setIsEditAvatarPopupOpen(false);
+  //     })
+  //     .then((res) => closeAllPopups())
+  //     .catch((err) => console.log(err));
+  // }
+
+    function handleUpdateAvatar({ avatar }) {
+      api
+        .setAvatar(avatar.current.value, token)
+        // .updateAvatar(avatar, token)
+        .then((res) => {
+          setCurrentUser(res.data);
+        })
+        // .then((res) => closeAllPopups())
+        .catch((err) => console.log(err));
+      closeAllPopups();
+    }
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
+      // const isLiked = card.likes.includes(currentUser._id);
 
     // Send a request to the API and getting the updated card data
     api
-      .changeLikeCardStatus(card._id, isLiked)
+      .changeLikeCardStatus(card._id, isLiked, token)
       .then((newCard) => {
         // Create a new array based on the existing one and putting a new card into it
         const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
@@ -100,7 +114,7 @@ function App() {
   function handleCardDelete(card) {
     // const isOwn = card.owner._id === currentUser._id;
     api
-      .deleteCard(card._id)
+      .deleteCard(card._id, token)
       .then(() => {
         setCards(cards.filter((c) => c._id !== card._id));
       })
@@ -110,39 +124,52 @@ function App() {
 
   function handleAddPlace({ title, link }) {
     api
-      .addNewCard({ title, link })
+      .addNewCard({ title, link }, token)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([newCard.data, ...cards]);
       })
       .then((res) => closeAllPopups())
       .catch((err) => console.log(err));
   }
 
   useEffect(() => {
-    if (loggedIn) {
-      api.getUserInfo().then((userProfile) => {
-        setCurrentUser(userProfile);
-      });
-      api
-        .getInitialCards()
-        .then((data) => {
-          if (data) {
-            setCards((cards) => [...cards, ...data]);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [loggedIn]);
+    api
+    .getUserInfo(token)
+      .then((res) => {
+        setCurrentUser(res.data);
+        api
+          .getInitialCards(token)
+          .then((res) => {
+            if (res.data) {
+              setCards((cards) => [...cards, res.data]);
+            }
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }, [token]);
+
+  // useEffect(() => {
+  //   if (loggedIn) {
+  //     api.getUserInfo().then((data) => {
+  //       setCurrentUser(data);
+  //     });
+  //     api
+  //       .getInitialCards()
+  //       .then((data) => {
+  //         if (data) {
+  //           setCards((cards) => [...cards, ...data]);
+  //         }
+  //       })
+  //       .catch((err) => console.log(err))
+  //       .catch((err) => console.log(err));
+  //   }
+  // }, [loggedIn]);
 
   function resetForm() {
     setEmail('');
     setPassword('');
-  };
+  }
 
   function handleLogin() {
     setLoggedIn(true);
@@ -150,28 +177,30 @@ function App() {
 
   function handleLoginSubmit(e) {
     e.preventDefault();
-    // const [email, password] = [e.target.email.value, e.target.password.value];
     auth
       .authorize(email, password)
       .then((data) => {
         if (data && data.token) {
+          setToken(data.token);
+          localStorage.setItem('token', data.token);
           handleLogin();
+          history.push('/main');
         } else {
           resetForm();
           if (!email || !password) {
+            handleToolTip('error');
             throw new Error(
               '400 - one or more of the fields were not provided'
             );
           }
           if (!data) {
+            handleToolTip('error');
             throw new Error(
               '401 - the user with the specified email not found'
             );
           }
         }
       })
-      .then(resetForm)
-      .then(() => history.push('/main'))
       .catch((err) => console.log(err.message));
   };
 
@@ -180,25 +209,73 @@ function App() {
     auth
       .register(email, password)
       .then((res) => {
-        if (!res.data) {
-          handleToolTip('error');
-          throw new Error(`400 - ${res.message ? res.message : res.error}`);
-        }
+         if (!(res.data && res.data._id)) {
+           handleToolTip('error');
+           throw new Error(`400 - ${res.message ? res.message : res.error}`);
+         } else {
+           handleToolTip('success');
+         }
       })
       .then((res) => {
         setRegistered(true);
         history.push('/signin');
         return res;
       })
-      .then((res) => {
-        handleToolTip('success');
-        return res;
-      })
       .then(resetForm)
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   };
+
+  // function handleLoginSubmit(e) {
+  //   e.preventDefault();
+  //   // const [email, password] = [e.target.email.value, e.target.password.value];
+  //   auth
+  //     .authorize(email, password)
+  //     .then((data) => {
+  //       if (data) {
+  //         handleLogin();
+  //       } else {
+  //         resetForm();
+  //         if (!email || !password) {
+  //           throw new Error(
+  //             '400 - one or more of the fields were not provided'
+  //           );
+  //         }
+  //         if (!data) {
+  //           throw new Error(
+  //             '401 - the user with the specified email not found'
+  //           );
+  //         }
+  //       }
+  //     })
+  //     .then(resetForm)
+  //     .then(() => history.push('/main'))
+  //     .catch((err) => console.log(err.message));
+  // }
+
+  // function handleRegisterSubmit(e) {
+  //   e.preventDefault();
+  //   auth
+  //     .register(email, password)
+  //     .then((res) => {
+  //       if (!res.data) {
+  //         handleToolTip('error');
+  //         throw new Error(`400 - ${res.message ? res.message : res.error}`);
+  //       }
+  //     })
+  //     .then((res) => {
+  //       setRegistered(true);
+  //       history.push('/signin');
+  //       return res;
+  //     })
+  //     .then((res) => {
+  //       handleToolTip('success');
+  //       return res;
+  //     })
+  //     .then(resetForm)
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
   function handleLogout() {
     localStorage.removeItem('token');
@@ -206,9 +283,25 @@ function App() {
     history.push('/signin');
   }
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
 
+  //   if (token) {
+  //     auth
+  //       .getContent(token)
+  //       .then((res) => {
+  //         setLoggedIn(true);
+  //         setUserEmail(res.data.email);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } else {
+  //     setLoggedIn(false);
+  //   }
+  // }, [loggedIn, userEmail]);
+
+  useEffect(() => {
     if (token) {
       auth
         .getContent(token)
@@ -216,13 +309,12 @@ function App() {
           setLoggedIn(true);
           setUserEmail(res.data.email);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => console.log(err));
     } else {
       setLoggedIn(false);
     }
-  }, [loggedIn, userEmail]);
+  // }, []);
+  }, [token]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -306,7 +398,6 @@ function App() {
             onClose={closeAllPopups}
           />
           <PopupWithImage onClose={closeAllPopups} card={selectedCard} />
-
           <Header
             loggedIn={loggedIn}
             userEmail={userEmail}
@@ -330,11 +421,11 @@ function App() {
             selectedCard={selectedCard}
             cards={cards}
           />
-          <Footer />
         </Route>
-        {/* {loggedIn && <Footer />} */}
         <Redirect from='*' to='/' />
       </Switch>
+      <Footer />
+      {/* {loggedIn && <Footer />} */}
     </CurrentUserContext.Provider>
   );
 }

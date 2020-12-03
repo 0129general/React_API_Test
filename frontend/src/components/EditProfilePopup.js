@@ -4,8 +4,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function EditProfilePopup(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  const [name, setName] = useState();
-  const [description, setDescription] = useState();
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
     // After loading the current user from the API
   // their data will be used in managed components.

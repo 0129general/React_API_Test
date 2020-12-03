@@ -18,14 +18,18 @@ function Main(props) {
             ></button>
             <img
               className='profile__image'
-              src={currentUser.avatar}
+              src={currentUser && currentUser.avatar}
               alt='profile-picture'
             />
           </div>
           <div className='profile__info'>
             <div className='profile__text'>
-              <h1 className='profile__title'>{currentUser.name}</h1>
-              <p className='profile__subtitle'>{currentUser.about}</p>
+              <h1 className='profile__title'>
+                {currentUser && currentUser.name}
+              </h1>
+              <p className='profile__subtitle'>
+                {currentUser && currentUser.about}
+              </p>
             </div>
             <button
               className='button profile__edit-button'

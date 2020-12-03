@@ -7,7 +7,8 @@ function EditAvatarPopup(props) {
     function handleSubmit(e) {
         e.preventDefault();
         props.onUpdateAvatar({
-          avatar: avatarRef.current.value,
+          // avatar: avatarRef.current.value,
+          avatar: avatarRef,
         });
     }
 

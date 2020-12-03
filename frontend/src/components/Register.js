@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 // import auth from '../utils/auth';
 
 function Register({
-  registered,
+  // registered,
   handleRegisterSubmit,
   history,
   email,
