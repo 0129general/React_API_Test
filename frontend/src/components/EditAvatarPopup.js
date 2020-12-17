@@ -7,7 +7,6 @@ function EditAvatarPopup(props) {
     function handleSubmit(e) {
         e.preventDefault();
         props.onUpdateAvatar({
-          // avatar: avatarRef.current.value,
           avatar: avatarRef,
         });
     }
@@ -17,7 +16,6 @@ function EditAvatarPopup(props) {
         name='change-image'
         title='Change profile picture'
         buttonText='Save'
-        // isOpen={props.isEditAvatarPopupOpen}
         isOpen={props.isOpen}
         onClose={props.onClose}
         onSubmit={handleSubmit}

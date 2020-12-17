@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-// import { Link } from 'react-router-dom';
-// import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 function Login({
@@ -14,50 +12,8 @@ function Login({
     setEmail,
   }) 
   {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+
   const history = useHistory();
-
-  // const resetForm = () => {
-  //   setEmail('');
-  //   setPassword('');
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   auth
-  //     .authorize(email, password)
-  //     .then((data) => {
-  //       if (!email || !password) {
-  //         throw new Error('400 - one or more of the fields were not provided');
-  //       }
-  //       if (!data) {
-  //         throw new Error('401 - the user with the specified email not found');
-  //       }
-  //       if (data.token) {
-  //         props.handleLogin();
-  //       }
-  //     })
-  //     .then(() => history.push('/main'))
-  //     // .then(resetForm)
-  //     .catch((err) => {
-  //       console.log(err.message);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   if (localStorage.getItem('token')) {
-  //     history.push('/main');
-  //     setUserEmail(email || userEmail);
-  //   }
-  // }, [history, email, userEmail, setUserEmail]);
-
-  // useEffect(() => {
-  //   if (loggedIn) {
-  //     history.push('/main');
-  //     setUserEmail(email || userEmail);
-  //   }
-  // }, [history, email, loggedIn, userEmail, setUserEmail]);
 
   useEffect(() => {
     if (loggedIn) {

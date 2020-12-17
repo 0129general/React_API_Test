@@ -1,86 +1,95 @@
 const Card = require('../models/card');
 
-module.exports.getAllCards = (req, res) => {
+const BadRequestError = require('../errors/bad-request-err');
+const ServerError = require('../errors/server-err');
+const NotFoundError = require('../errors/not-found-err');
+const AuthError = require('../errors/auth-err');
+
+module.exports.getAllCards = (req, res, next) => {
   Card.find({})
-    .populate('owner')
-    .populate('likes')
-    .then((cards) => res.send({ data: cards }))
-    .catch(() => res.status(500).send({ message: 'Internal Server Error' }));
+    .then((card) => res.send({ data: card }))
+    .catch(() => {
+      throw new ServerError('An error has occured on the server');
+    })
+    .catch(next);
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Not a valid card' });
-      } else {
-        res.status(500).send({ message: 'Internal Server Error' });
+        throw new BadRequestError(
+          'Unable to create card. Please try again later.'
+        );
       }
-    });
+    })
+    .catch(next);
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
-      if (card) {
-        res.send({ data: card });
+      if (card && req.user._id.toString() === card.owner.toString()) {
+        Card.deleteOne(card).then((deletedCard) => {
+          res.send(deletedCard);
+        });
+      } else if (!card) {
+        throw new NotFoundError('Card not found.');
       } else {
-        res.status(404).send({ message: 'Card not found' });
+        throw new AuthError(
+          'You need to be the owner of this card to delete it.'
+        );
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Not a valid card id' });
-      } else {
-        res.status(500).send({ message: 'Internal Server Error' });
+        throw new NotFoundError('Card not found.');
       }
-    });
+      next(err);
+    })
+    .catch(next);
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
-    .populate('likes')
     .then((card) => {
       if (card) {
-        res.send({ data: card });
-      } else {
-        res.status(404).send({ message: 'Card not found' });
+          res.send(card);
+      } else if (!card) {
+        throw new NotFoundError('Card not found.');
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Not a valid card id' });
-      } else {
-        res.status(500).send({ message: 'Internal Server Error' });
+      if (err.name === 'CastError' || err.statusCode === 404) {
+        throw new NotFoundError('Card not found.');
       }
-    });
+    })
+    .catch(next);
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-    { new: true },
+    { new: true }
   )
-    .populate('likes')
     .then((card) => {
       if (card) {
-        res.send({ data: card });
-      } else {
-        res.status(404).send({ message: 'Card not found' });
+          res.send(card);
+      } else if (!card) {
+        throw new NotFoundError('Card not found.');
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Not a valid card id' });
-      } else {
-        res.status(500).send({ message: 'Internal Server Error' });
+      if (err.name === 'CastError' || err.statusCode === 404) {
+        throw new NotFoundError('Card not found.');
       }
-    });
+    })
+    .catch(next);
 };

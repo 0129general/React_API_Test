@@ -4,9 +4,9 @@ class Api {
     this._headers = headers;
   }
 
-  getAppInfo() {
-    return Promise.all([this.getInitialCards(), this.getUserInfo()]);
-  }
+  // getAppInfo() {
+  //   return Promise.all([this.getInitialCards(), this.getUserInfo()]);
+  // }
 
   // Load Cards from the Server
   getInitialCards(token) {
@@ -16,17 +16,11 @@ class Api {
         Authorization: `Bearer ${token}`,
       },
     })
-      // .then((res) =>
-      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      // )
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
       });
-      // .catch((err) => {
-      //   console.log(err);
-      // });
   }
 
   // Load User Information from the Server
@@ -37,17 +31,11 @@ class Api {
         Authorization: `Bearer ${token}`,
       },
     })
-      // .then((res) =>
-      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      // )
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
       });
-      // .catch((err) => {
-      //   console.log(err);
-      // });
   }
 
   // Update Profile Picture
@@ -60,17 +48,11 @@ class Api {
       method: 'PATCH',
       body: JSON.stringify({ avatar: imageLink }),
     })
-      // .then((res) =>
-      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      // )
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
       });
-      // .catch((err) => {
-      //   console.log(err);
-      // });
   }
 
   // Edit Profile
@@ -88,9 +70,6 @@ class Api {
           return res.json();
         }
       });
-      // .catch((err) => {
-      //   console.log(err);
-      // });
   }
 
   // Add New Card
@@ -106,17 +85,11 @@ class Api {
         link: data.link,
       }),
     })
-      // .then((res) =>
-      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      // )
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
       });
-      // .catch((err) => {
-      //   console.log(err);
-      // });
   }
 
   // Delete Card
@@ -128,12 +101,6 @@ class Api {
       },
       method: 'DELETE',
     })
-      // .then((res) =>
-      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      // )
-      // .catch((err) => {
-      //   console.log(err);
-      // });
   }
 
   // Add and Remove Likes
@@ -145,17 +112,11 @@ class Api {
       },
       method: isLiked ? 'DELETE' : 'PUT',
     })
-      // .then((res) =>
-      //   res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-      // )
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
       });
-      // .catch((err) => {
-      //   console.log(err);
-      // });
   }
 }
 

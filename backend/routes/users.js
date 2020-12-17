@@ -1,24 +1,87 @@
 const router = require('express').Router();
-const users = require('../controllers/users');
+const { celebrate, Joi } = require('celebrate');
 
-router.get('/', (req, res) => {
-  users.getAllUsers(req, res);
-});
+const {
+  getAllUsers,
+  getUserById,
+  updateUser,
+  updateAvatar,
+} = require('../controllers/users');
 
-router.post('/', (req, res) => {
-  users.createUser(req, res);
-});
+router.get(
+  '/',
+  celebrate({
+    headers: Joi.object()
+      .keys({
+        authorization: Joi.string()
+          .regex(
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
+          )
+          .required(),
+      })
+      .options({ allowUnknown: true }),
+  }),
+  getAllUsers
+);
 
-router.get('/:id', (req, res) => {
-  users.getUserById(req, res);
-});
+router.get(
+  '/:id',
+  celebrate({
+    headers: Joi.object()
+      .keys({
+        authorization: Joi.string()
+          .regex(
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
+          )
+          .required(),
+      })
+      .options({ allowUnknown: true }),
+    params: Joi.object().keys({
+      id: Joi.string().required().alphanum(),
+    }),
+  }),
+  getUserById
+);
 
-router.patch('/me', (req, res) => {
-  users.updateUser(req, res);
-});
+router.patch(
+  '/me',
+  celebrate({
+    headers: Joi.object()
+      .keys({
+        authorization: Joi.string()
+          .regex(
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
+          )
+          .required(),
+      })
+      .options({ allowUnknown: true }),
+    body: Joi.object().keys({
+      name: Joi.string().required().min(2).max(30),
+      about: Joi.string().required().min(2).max(30),
+    }),
+  }),
+  updateUser
+);
 
-router.patch('/me/avatar', (req, res) => {
-  users.updateAvatar(req, res);
-});
+router.patch(
+  '/me/avatar',
+  celebrate({
+    headers: Joi.object()
+      .keys({
+        authorization: Joi.string()
+          .regex(
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
+          )
+          .required(),
+      })
+      .options({ allowUnknown: true }),
+    body: Joi.object().keys({
+      avatar: Joi.string()
+        .required()
+        .uri({ scheme: ['http', 'https'] }),
+    }),
+  }),
+  updateAvatar
+);
 
 module.exports = router;

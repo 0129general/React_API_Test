@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import React, { useState, useEffect } from 'react';
-// import { Link, useHistory } from 'react-router-dom';
-// import auth from '../utils/auth';
 
 function Register({
-  // registered,
   handleRegisterSubmit,
   history,
   email,
@@ -13,44 +9,12 @@ function Register({
   password,
   setPassword,
 }) {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  // const history = useHistory();
-
-  // const resetForm = () => {
-  //   setEmail('');
-  //   setPassword('');
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   auth
-  //     .register({ email, password })
-  //     .then(resetForm)
-  //     .then((res) => {
-  //       props.handleToolTip('success');
-  //       return res;
-  //     })
-  //     .then((res) => {
-  //       history.push('/signin');
-  //       return res;
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
+  
   useEffect(() => {
     if (localStorage.getItem('token')) {
       history.push('/main');
     }
   }, [history]);
-
-  // useEffect(() => {
-  //   if (registered) {
-  //     history.push('/signin');
-  //   }
-  // }, [history, registered]);
 
   return (
     <>

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PopupWithForm from './PopupWithForm';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function EditProfilePopup(props) {
-  const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-    // After loading the current user from the API
+  // After loading the current user from the API
   // their data will be used in managed components.
   React.useEffect(() => {
     setName(currentUser && currentUser.name);
@@ -36,7 +36,6 @@ function EditProfilePopup(props) {
       name='edit-profile'
       title='Edit profile'
       buttonText='Save'
-      // isOpen={props.isEditProfilePopupOpen}
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}

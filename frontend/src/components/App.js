@@ -62,46 +62,31 @@ function App() {
 
   function handleUpdateUser({ name, about }) {
     api
-      .updateProfile(name, about)
-      .then((updateProfile) => {
-        setCurrentUser(updateProfile);
-        setIsEditProfilePopupOpen(false);
+      .updateProfile({ name, about }, token)
+      .then((res) => {
+        setCurrentUser(res.data);
       })
-      .then((res) => closeAllPopups())
       .catch((err) => console.log(err));
+      closeAllPopups();
   }
-
-  // function handleUpdateAvatar({ avatar }) {
-  //   api
-  //     .updateAvatar(avatar)
-  //     .then((updateProfile) => {
-  //       setCurrentUser(updateProfile);
-  //       setIsEditAvatarPopupOpen(false);
-  //     })
-  //     .then((res) => closeAllPopups())
-  //     .catch((err) => console.log(err));
-  // }
 
     function handleUpdateAvatar({ avatar }) {
       api
-        .setAvatar(avatar.current.value, token)
-        // .updateAvatar(avatar, token)
+        .updateAvatar(avatar.current.value, token)
         .then((res) => {
           setCurrentUser(res.data);
         })
-        // .then((res) => closeAllPopups())
         .catch((err) => console.log(err));
       closeAllPopups();
     }
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-      // const isLiked = card.likes.includes(currentUser._id);
+    const isLiked = card.likes.includes(currentUser._id);
 
     // Send a request to the API and getting the updated card data
     api
-      .changeLikeCardStatus(card._id, isLiked, token)
+      .changeLikeCardStatus(card._id, isLiked, token) 
       .then((newCard) => {
         // Create a new array based on the existing one and putting a new card into it
         const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
@@ -112,7 +97,6 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    // const isOwn = card.owner._id === currentUser._id;
     api
       .deleteCard(card._id, token)
       .then(() => {
@@ -141,30 +125,13 @@ function App() {
           .getInitialCards(token)
           .then((res) => {
             if (res.data) {
-              setCards((cards) => [...cards, res.data]);
+              setCards((cards) => res.data);
             }
           })
           .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   }, [token]);
-
-  // useEffect(() => {
-  //   if (loggedIn) {
-  //     api.getUserInfo().then((data) => {
-  //       setCurrentUser(data);
-  //     });
-  //     api
-  //       .getInitialCards()
-  //       .then((data) => {
-  //         if (data) {
-  //           setCards((cards) => [...cards, ...data]);
-  //         }
-  //       })
-  //       .catch((err) => console.log(err))
-  //       .catch((err) => console.log(err));
-  //   }
-  // }, [loggedIn]);
 
   function resetForm() {
     setEmail('');
@@ -225,81 +192,11 @@ function App() {
       .catch((err) => console.log(err));
   };
 
-  // function handleLoginSubmit(e) {
-  //   e.preventDefault();
-  //   // const [email, password] = [e.target.email.value, e.target.password.value];
-  //   auth
-  //     .authorize(email, password)
-  //     .then((data) => {
-  //       if (data) {
-  //         handleLogin();
-  //       } else {
-  //         resetForm();
-  //         if (!email || !password) {
-  //           throw new Error(
-  //             '400 - one or more of the fields were not provided'
-  //           );
-  //         }
-  //         if (!data) {
-  //           throw new Error(
-  //             '401 - the user with the specified email not found'
-  //           );
-  //         }
-  //       }
-  //     })
-  //     .then(resetForm)
-  //     .then(() => history.push('/main'))
-  //     .catch((err) => console.log(err.message));
-  // }
-
-  // function handleRegisterSubmit(e) {
-  //   e.preventDefault();
-  //   auth
-  //     .register(email, password)
-  //     .then((res) => {
-  //       if (!res.data) {
-  //         handleToolTip('error');
-  //         throw new Error(`400 - ${res.message ? res.message : res.error}`);
-  //       }
-  //     })
-  //     .then((res) => {
-  //       setRegistered(true);
-  //       history.push('/signin');
-  //       return res;
-  //     })
-  //     .then((res) => {
-  //       handleToolTip('success');
-  //       return res;
-  //     })
-  //     .then(resetForm)
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
-
   function handleLogout() {
     localStorage.removeItem('token');
     setLoggedIn(false);
     history.push('/signin');
   }
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-
-  //   if (token) {
-  //     auth
-  //       .getContent(token)
-  //       .then((res) => {
-  //         setLoggedIn(true);
-  //         setUserEmail(res.data.email);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   } else {
-  //     setLoggedIn(false);
-  //   }
-  // }, [loggedIn, userEmail]);
 
   useEffect(() => {
     if (token) {
@@ -313,7 +210,6 @@ function App() {
     } else {
       setLoggedIn(false);
     }
-  // }, []);
   }, [token]);
 
   return (
@@ -425,7 +321,6 @@ function App() {
         <Redirect from='*' to='/' />
       </Switch>
       <Footer />
-      {/* {loggedIn && <Footer />} */}
     </CurrentUserContext.Provider>
   );
 }
