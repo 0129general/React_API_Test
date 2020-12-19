@@ -3,12 +3,19 @@
 
 ### Overview
 
+* Server
 * Description of the project and its functionality
 * Features
 * Technologies
 * Figma
 * Images
 * Demo
+
+### Server
+- Api hosted on Microsoft Azure Cloud
+- Server IP: 13.90.58.253
+- Front-end: https://lindakovacs.students.nomoreparties.site/
+- Back-end/Api: https://api.lindakovacs.students.nomoreparties.site/
 
 **Description of the project and its functionality**
 
