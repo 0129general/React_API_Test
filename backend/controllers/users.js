@@ -18,34 +18,39 @@ module.exports.getAllUsers = (req, res, next) => {
 };
 
 module.exports.getUserById = (req, res, next) => {
-    User.findById(req.params.id === 'me' ? req.user._id : req.params.id)
-      .select('+password')
-      .then((user) => {
-        if (user) {
-          res.send({ data: user });
-        } else {
-          throw new NotFoundError('User not found.');
-        }
-      })
-      .catch((err) => {
-        if (err.name === 'CastError' || err.name === 'TypeError') {
-          throw new NotFoundError('User not found.');
-        }
-        next(err);
-      })
-      .catch(next);
+  User.findById(req.params.id === 'me' ? req.user._id : req.params.id)
+    .select('+password')
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        throw new NotFoundError('User not found.');
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError' || err.name === 'TypeError') {
+        throw new NotFoundError('User not found.');
+      }
+      next(err);
+    })
+    .catch(next);
 };
 
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
-  bcrypt.hash(password, 10)
-  .then((hash) => User.create({ name, about, avatar, email, password: hash }))
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({ name, about, avatar, email, password: hash }))
     .then((user) => res.send({ data: user }))
+    // .catch((err) => {
+    //   if (err.name === 'ValidationError' || err.name === 'MongoError') {
+    //     throw new BadRequestError(
+    //       'Unable to create user. Please try again later.'
+    //     );
+    //   }
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'MongoError') {
-        throw new BadRequestError(
-          'Unable to create user. Please try again later.'
-        );
+      if (err.name === 'MongoError' && err.statusCode === '11000') {
+        res.status(409).json({ message: 'User already taken' });
       }
       next(err);
     })
@@ -66,7 +71,7 @@ module.exports.updateUser = (req, res, next) => {
           'Unable to update user. Please try again later.'
         );
       }
-    next(err);
+      next(err);
     })
     .catch(next);
 };
@@ -93,12 +98,10 @@ module.exports.updateAvatar = (req, res, next) => {
 module.exports.register = (req, res) => {
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) =>
-      User.create({
-        email: req.body.email,
-        password: hash,
-      })
-    )
+    .then((hash) => User.create({
+      email: req.body.email,
+      password: hash,
+    }))
     .then((user) => {
       res.status(201).send({
         _id: user._id,

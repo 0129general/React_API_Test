@@ -57,8 +57,9 @@ class Auth {
   }
 }
 const auth = new Auth({
+  //baseUrl: "https://api.lindakovacs.students.nomoreparties.site", //api backend
   // baseUrl: 'https://register.nomoreparties.co',
-  baseUrl: 'http://localhost:3001',
+  baseUrl: 'http://localhost:3001', //localhost
 });
 
 export default auth;

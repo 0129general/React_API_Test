@@ -18,7 +18,7 @@ router.post(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
           )
           .required(),
       })
@@ -41,7 +41,7 @@ router.delete(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
           )
           .required(),
       })
@@ -50,7 +50,7 @@ router.delete(
       cardId: Joi.string().alphanum().required(),
     }),
   }),
-  deleteCard
+  deleteCard,
 );
 
 router.put(
@@ -60,7 +60,7 @@ router.put(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
           )
           .required(),
       })
@@ -69,7 +69,7 @@ router.put(
       cardId: Joi.string().required().alphanum(),
     }),
   }),
-  likeCard
+  likeCard,
 );
 
 router.delete(
@@ -79,7 +79,7 @@ router.delete(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
           )
           .required(),
       })
@@ -88,7 +88,7 @@ router.delete(
       cardId: Joi.string().required().alphanum(),
     }),
   }),
-  dislikeCard
+  dislikeCard,
 );
 
 module.exports = router;

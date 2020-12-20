@@ -7,14 +7,14 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 2,
     maxlength: 30,
-    default: "Jacques Cousteau",
+    default: 'Jacques Cousteau',
   },
   about: {
     type: String,
     required: true,
     minlength: 2,
     maxlength: 30,
-    default: "Explorer",
+    default: 'Explorer',
   },
   avatar: {
     type: String,
@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
         );
       },
     },
-    default: "https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg",
+    default: 'https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg',
   },
   email: {
     type: String,
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator: (email) => validator.isEmail(email),
-      message: "Email address not valid ",
+      message: 'Email address not valid ',
     },
   },
   password: {
@@ -42,6 +42,13 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
     // minlength: 8
+    // validate: {
+    //   validator(v) {
+    //     return /^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,1024}*$/gm.test(
+    //       v
+    //     );
+    //   },
+    // },
   },
 });
 

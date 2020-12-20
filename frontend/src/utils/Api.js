@@ -157,8 +157,9 @@ class Api {
 // }
 
 const api = new Api({
+  //baseUrl: "https://api.lindakovacs.students.nomoreparties.site", //api back-end
   // baseUrl: 'https://around.nomoreparties.co/v1/group-2',
-  baseUrl: 'http://localhost:3001',
+  baseUrl: 'http://localhost:3001', //localhost
   // headers: {
   //   // Authorization: 'd38c3eff-8aa3-43a2-86b1-ec6a6fc8a616',
   //   'Content-Type': 'application/json',

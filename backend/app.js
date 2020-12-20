@@ -1,17 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cardsRouter = require('./routes/cards');
-const usersRouter = require('./routes/users');
+const { celebrate, Joi, errors, isCelebrateError } = require('celebrate');
 const path = require('path');
 const cors = require('cors');
+const cardsRouter = require('./routes/cards');
+const usersRouter = require('./routes/users');
 
-const dotenv = require('dotenv');
-const { celebrate, Joi, errors, isCelebrateError } = require('celebrate');
+// const dotenv = require('dotenv');
+
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middleware/auth');
 const BadRequestError = require('./errors/bad-request-err');
+const NotFoundError = require('./errors/not-found-err');
 
 const { PORT = 3001 } = process.env;
 const app = express();
@@ -34,15 +36,24 @@ app.use('/cards', auth, cardsRouter);
 app.use('/users', auth, usersRouter);
 
 app.post(
-  "/signup",
+  '/signup',
   celebrate({
     body: Joi.object().keys({
-      name: Joi.string().min(2).max(30).pattern(new RegExp("^[a-zA-Z-\\s]*$")),
+      name: Joi.string().min(2).max(30).pattern(new RegExp('^[a-zA-Z-\\s]*$')),
       about: Joi.string().min(2).max(30),
-      // avatar: Joi.string().uri({ scheme: ["http", "https"] }),
+      // avatar: Joi.string().uri({ scheme: ['http', 'https'] }),
       avatar: Joi.string().uri(),
       email: Joi.string().required().email(),
-      password: Joi.string().required().min(8),
+      password: Joi.string()
+        .required()
+        .min(8)
+        // .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/),
+        // .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,1024}$/),
+      // .pattern(
+      //   new RegExp(
+      //     '/^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,1024}$/'
+      //   )
+      // ),
     }),
   }),
   createUser
@@ -59,7 +70,7 @@ app.post(
   login
 );
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(errorLogger);
 
@@ -85,7 +96,8 @@ app.use((err, req, res, next) => {
 });
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Requested resource not found' });
+  // res.status(404).json({ message: 'Requested resource not found' });
+  throw new NotFoundError('Requested resource not found.');
 });
 
 app.listen(PORT, () => {
