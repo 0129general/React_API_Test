@@ -3,10 +3,9 @@ const mongoose = require('mongoose');
 const { celebrate, Joi, errors, isCelebrateError } = require('celebrate');
 const path = require('path');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
-
-// const dotenv = require('dotenv');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
@@ -44,16 +43,7 @@ app.post(
       // avatar: Joi.string().uri({ scheme: ['http', 'https'] }),
       avatar: Joi.string().uri(),
       email: Joi.string().required().email(),
-      password: Joi.string()
-        .required()
-        .min(8)
-        // .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/),
-        // .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,1024}$/),
-      // .pattern(
-      //   new RegExp(
-      //     '/^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,1024}$/'
-      //   )
-      // ),
+      password: Joi.string().min(8).alphanum().required(),
     }),
   }),
   createUser

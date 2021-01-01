@@ -15,13 +15,13 @@ router.get(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
           )
           .required(),
       })
       .options({ allowUnknown: true }),
   }),
-  getAllUsers,
+  getAllUsers
 );
 
 router.get(
@@ -37,7 +37,11 @@ router.get(
       })
       .options({ allowUnknown: true }),
     params: Joi.object().keys({
-      id: Joi.string().required().alphanum().hex(),
+      // id: Joi.string().alphanum().required(),
+      // id: Joi.string().hex().required(),
+      id: Joi.string()
+        .regex(/^[A-Fa-f0-9]*/)
+        .required(),
     }),
   }),
   getUserById
@@ -60,7 +64,7 @@ router.patch(
       about: Joi.string().required().min(2).max(30),
     }),
   }),
-  updateUser,
+  updateUser
 );
 
 router.patch(
@@ -70,7 +74,7 @@ router.patch(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
           )
           .required(),
       })
@@ -83,7 +87,7 @@ router.patch(
         // .uri({ scheme: ['http', 'https'] }),
     }),
   }),
-  updateAvatar,
+  updateAvatar
 );
 
 module.exports = router;

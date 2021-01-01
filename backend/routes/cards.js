@@ -18,7 +18,7 @@ router.post(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
           )
           .required(),
       })
@@ -27,7 +27,9 @@ router.post(
       name: Joi.string().required().min(2).max(30),
       link: Joi.string()
         .required()
-        .uri({ scheme: ['http', 'https'] }),
+        // .uri({ scheme: ['http', 'https'] }),
+        // eslint-disable-next-line no-useless-escape
+        .pattern(/^(http:\/\/|https:\/\/)(w{3}\.)?([\w\-\/\(\):;,\?]+\.{1}?[\w\-\/\(\):;,\?]+)+#?$/),
       likes: Joi.array().items(Joi.string()),
     }),
   }),
@@ -41,7 +43,7 @@ router.delete(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
           )
           .required(),
       })
@@ -50,7 +52,7 @@ router.delete(
       cardId: Joi.string().alphanum().required(),
     }),
   }),
-  deleteCard,
+  deleteCard
 );
 
 router.put(
@@ -60,16 +62,16 @@ router.put(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
           )
           .required(),
       })
       .options({ allowUnknown: true }),
     params: Joi.object().keys({
-      cardId: Joi.string().required().alphanum(),
+      cardId: Joi.string().alphanum().required(),
     }),
   }),
-  likeCard,
+  likeCard
 );
 
 router.delete(
@@ -79,16 +81,16 @@ router.delete(
       .keys({
         authorization: Joi.string()
           .regex(
-            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/,
+            /^(Bearer )[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/
           )
           .required(),
       })
       .options({ allowUnknown: true }),
     params: Joi.object().keys({
-      cardId: Joi.string().required().alphanum(),
+      cardId: Joi.string().alphanum().required(),
     }),
   }),
-  dislikeCard,
+  dislikeCard
 );
 
 module.exports = router;

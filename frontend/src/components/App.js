@@ -23,7 +23,7 @@ function App() {
   const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState(null);
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState('');
@@ -116,23 +116,6 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  useEffect(() => {
-    api
-    .getUserInfo(token)
-      .then((res) => {
-        setCurrentUser(res.data);
-        api
-          .getInitialCards(token)
-          .then((res) => {
-            if (res.data) {
-              setCards((cards) => res.data);
-            }
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
-  }, [token]);
-
   function resetForm() {
     setEmail('');
     setPassword('');
@@ -176,12 +159,13 @@ function App() {
     auth
       .register(email, password)
       .then((res) => {
-         if (!(res.data && res.data._id)) {
-           handleToolTip('error');
-           throw new Error(`400 - ${res.message ? res.message : res.error}`);
-         } else {
-           handleToolTip('success');
-         }
+        //  if (!(res.data && res.data._id)) {
+          if (!(res && res._id)) {
+            handleToolTip('error');
+            throw new Error(`400 - ${res.message ? res.message : res.error}`);
+          } else {
+            handleToolTip('success');
+          }
       })
       .then((res) => {
         setRegistered(true);
@@ -210,6 +194,24 @@ function App() {
     } else {
       setLoggedIn(false);
     }
+  }, [token]);
+
+  useEffect(() => {
+    api
+      .getUserInfo(token)
+      .then((res) => {
+        setCurrentUser(res.data);
+        api
+          .getInitialCards(token)
+          .then((res) => {
+            if (res.data) {
+              setCards((cards) => res.data);
+              // setCards((cards) => [...cards, res.data]);
+            }
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
   }, [token]);
 
   return (

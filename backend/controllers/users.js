@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const BadRequestError = require('../errors/bad-request-err');
 const NotFoundError = require('../errors/not-found-err');
 const AuthError = require('../errors/auth-err');
+const ConflictError = require('../errors/conflict-err');
+
 const User = require('../models/user');
 
 dotenv.config();
@@ -36,31 +38,11 @@ module.exports.getUserById = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
-  bcrypt
-    .hash(password, 10)
-    .then((hash) => User.create({ name, about, avatar, email, password: hash }))
-    .then((user) => res.send({ data: user }))
-    // .catch((err) => {
-    //   if (err.name === 'ValidationError' || err.name === 'MongoError') {
-    //     throw new BadRequestError(
-    //       'Unable to create user. Please try again later.'
-    //     );
-    //   }
-    .catch((err) => {
-      if (err.name === 'MongoError' && err.statusCode === '11000') {
-        res.status(409).json({ message: 'User already taken' });
-      }
-      next(err);
-    })
-    .catch(next);
-};
-
 module.exports.updateUser = (req, res, next) => {
+  const { name, about } = req.body;
   User.findByIdAndUpdate(
     { _id: req.user._id },
-    { $set: { name: req.body.name, about: req.body.about } },
+    { $set: { name, about } },
     { new: true, runValidators: true }
   )
     .select('+password')
@@ -77,9 +59,10 @@ module.exports.updateUser = (req, res, next) => {
 };
 
 module.exports.updateAvatar = (req, res, next) => {
+  const { avatar } = req.body;
   User.findByIdAndUpdate(
     { _id: req.user._id },
-    { avatar: req.body.avatar },
+    { avatar },
     { new: true, runValidators: true }
   )
     .select('+password')
@@ -96,21 +79,57 @@ module.exports.updateAvatar = (req, res, next) => {
 };
 
 module.exports.register = (req, res) => {
+  const { email, password } = req.body;
   bcrypt
-    .hash(req.body.password, 10)
+    .hash(password, 10)
     .then((hash) => User.create({
-      email: req.body.email,
+      email,
       password: hash,
     }))
     .then((user) => {
       res.status(201).send({
         _id: user._id,
-        email: user.email,
+        // email: user.email,
       });
     })
     .catch((err) => {
       res.status(400).send(err);
     });
+};
+
+// module.exports.createUser = (req, res, next) => {
+//   const { name, about, avatar, email, password } = req.body;
+//   bcrypt
+//     .hash(password, 10)
+//     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
+//     .then((user) => res.status(201).send({ _id: user._id }))
+//     .catch((err) => res.status(400).send(err))
+//     .catch(next);
+// };
+
+module.exports.createUser = (req, res, next) => {
+  const { name, about, avatar, email, password } = req.body;
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({ name, about, avatar, email, password: hash }))
+    .then((user) => res.status(201).send({ _id: user._id }))
+    .catch((err) => {
+      if (err.name === 'MongoError' && err.statusCode === '11000') {
+        throw new ConflictError('User already taken');
+      }
+      // .catch((err) => {
+      //   if (err.name === 'ValidationError' || err.name === 'MongoError') {
+      //     throw new BadRequestError(
+      //       'Unable to create user. Please try again later.'
+      //     );
+      //   }
+      // .catch((err) => {
+      //   if (err.name === 'MongoError' && err.statusCode === '11000') {
+      //     res.status(409).json({ message: 'User already taken' });
+      //   }
+      next(err);
+    })
+    .catch(next);
 };
 
 module.exports.login = (req, res, next) => {

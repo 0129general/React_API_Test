@@ -7,6 +7,7 @@ class Auth {
      return fetch(`${this.options.baseUrl}/signup`, {
        method: 'POST',
        headers: {
+         Acccept: 'application/json',
          'Content-Type': 'application/json',
        },
        body: JSON.stringify({ email, password }),
@@ -19,6 +20,7 @@ class Auth {
     return fetch(`${this.options.baseUrl}/signin`, {
       method: 'POST',
       headers: {
+        Acccept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email: userid, password: password }),
@@ -57,9 +59,9 @@ class Auth {
   }
 }
 const auth = new Auth({
+  baseUrl: 'http://localhost:3001', //localhost
   //baseUrl: "https://api.lindakovacs.students.nomoreparties.site", //api backend
   // baseUrl: 'https://register.nomoreparties.co',
-  baseUrl: 'http://localhost:3001', //localhost
 });
 
 export default auth;
