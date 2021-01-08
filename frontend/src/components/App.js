@@ -162,7 +162,15 @@ function App() {
         //  if (!(res.data && res.data._id)) {
           if (!(res && res._id)) {
             handleToolTip('error');
-            throw new Error(`400 - ${res.message ? res.message : res.error}`);
+            // throw new Error(`400 - ${res.message ? res.message : res.error}`);
+            // throw new Error(
+            //   `409(Conflict)  - ${res.message ? res.message : res.error}`
+            // );
+            if (res.status === 409) {
+              return Promise.reject(
+                new Error('(Conflict) - User already taken')
+              );
+            }
           } else {
             handleToolTip('success');
           }

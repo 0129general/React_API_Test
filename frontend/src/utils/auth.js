@@ -4,16 +4,26 @@ class Auth {
   }
 
   register(email, password) {
-     return fetch(`${this.options.baseUrl}/signup`, {
-       method: 'POST',
-       headers: {
-         Acccept: 'application/json',
-         'Content-Type': 'application/json',
-       },
-       body: JSON.stringify({ email, password }),
-     }).then((res) => {
-       return res.json();
-     });
+     return (
+       fetch(`${this.options.baseUrl}/signup`, {
+         method: 'POST',
+         headers: {
+           Acccept: 'application/json',
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({ email, password }),
+       })
+         //  .then((res) => {
+         //    return res.json();
+         //  });
+         .then((res) => {
+           if (res.status === 201) {
+             return res.json();
+           } else {
+             throw new Error('409 - Unsuccessful registration');
+           }
+         })
+     );
   }
 
   authorize(userid, password) {

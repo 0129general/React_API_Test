@@ -114,9 +114,14 @@ module.exports.createUser = (req, res, next) => {
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
     .then((user) => res.status(201).send({ _id: user._id }))
     .catch((err) => {
-      if (err.name === 'MongoError' && err.statusCode === '11000') {
+      if (err.name === 'ValidationError') {
+        throw new BadRequestError('Unable to create user. Please try again later.');
+      } else if (err.name === 'MongoError') {
         throw new ConflictError('User already taken');
       }
+      // if (err.name === 'MongoError' && err.statusCode === '11000') {
+      //   throw new ConflictError('User already taken');
+      // }
       // .catch((err) => {
       //   if (err.name === 'ValidationError' || err.name === 'MongoError') {
       //     throw new BadRequestError(

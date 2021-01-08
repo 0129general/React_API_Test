@@ -13,6 +13,7 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middleware/auth');
 const BadRequestError = require('./errors/bad-request-err');
 const NotFoundError = require('./errors/not-found-err');
+const ConflictError = require('./errors/conflict-err');
 
 const { PORT = 3001 } = process.env;
 const app = express();
@@ -62,6 +63,10 @@ app.post(
 
 // app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('*', (req, res) => {
+  res.status(404).send({ message: 'Requested resource not found' });
+});
+
 app.use(errorLogger);
 
 app.use((err, req, res, next) => {
@@ -77,6 +82,13 @@ app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
+  // if (isCelebrateError(err)) {
+  //   statusCode = 409;›
+  //   message = '(Conflict) - User already taken';
+  // }
+  if (isCelebrateError(err)) {
+    throw new ConflictError('User already taken.');
+  }
   res
     .status(statusCode)
     .send({

@@ -38,7 +38,7 @@ router.get(
       .options({ allowUnknown: true }),
     params: Joi.object().keys({
       // id: Joi.string().alphanum().required(),
-      // id: Joi.string().hex().required(),
+      // id: Joi.string().length(24).hex().required(),
       id: Joi.string()
         .regex(/^[A-Fa-f0-9]*/)
         .required(),

@@ -49,7 +49,8 @@ router.delete(
       })
       .options({ allowUnknown: true }),
     params: Joi.object().keys({
-      cardId: Joi.string().alphanum().required(),
+      // cardId: Joi.string().alphanum().required(),
+      cardId: Joi.string().length(24).hex().required(),
     }),
   }),
   deleteCard
@@ -68,7 +69,8 @@ router.put(
       })
       .options({ allowUnknown: true }),
     params: Joi.object().keys({
-      cardId: Joi.string().alphanum().required(),
+      // cardId: Joi.string().alphanum().required(),
+      cardId: Joi.string().length(24).hex().required(),
     }),
   }),
   likeCard
@@ -87,7 +89,8 @@ router.delete(
       })
       .options({ allowUnknown: true }),
     params: Joi.object().keys({
-      cardId: Joi.string().alphanum().required(),
+      // cardId: Joi.string().alphanum().required(),
+      cardId: Joi.string().length(24).hex().required(),
     }),
   }),
   dislikeCard
