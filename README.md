@@ -8,9 +8,9 @@ This repository contains the full API of "Around the U.S." project that features
 
 ### Server
 - Api hosted on Microsoft Azure Cloud
-- Server IP: 13.90.58.253
-- Front-end: https://lindakovacs.students.nomoreparties.site/
-- Back-end/Api: https://api.lindakovacs.students.nomoreparties.site/
+- Server IP: 20.83.184.10
+- Front-end: https://lkovacs.students.nomoreparties.site/
+- Back-end/Api: https://api.lkovacs.students.nomoreparties.site/
 
 # Links TBD
 * Link to repository with the complete React application which uses this API;
