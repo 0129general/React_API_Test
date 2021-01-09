@@ -158,7 +158,7 @@ class Api {
 
 const api = new Api({
   baseUrl: 'http://localhost:3001', //localhost
-  //baseUrl: "https://api.lindakovacs.students.nomoreparties.site", //api back-end
+  //baseUrl: "https://api.lkovacs.students.nomoreparties.site", //api back-end
   // baseUrl: 'https://around.nomoreparties.co/v1/group-2',
   // headers: {
   //   // Authorization: 'd38c3eff-8aa3-43a2-86b1-ec6a6fc8a616',

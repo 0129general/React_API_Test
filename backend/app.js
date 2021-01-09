@@ -35,6 +35,13 @@ app.use(requestLogger);
 app.use('/cards', auth, cardsRouter);
 app.use('/users', auth, usersRouter);
 
+// Server crash testing for review
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Server will crash now');
+  }, 0);
+});
+
 app.post(
   '/signup',
   celebrate({

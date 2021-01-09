@@ -70,7 +70,7 @@ class Auth {
 }
 const auth = new Auth({
   baseUrl: 'http://localhost:3001', //localhost
-  //baseUrl: "https://api.lindakovacs.students.nomoreparties.site", //api backend
+  //baseUrl: "https://api.lkovacs.students.nomoreparties.site", //api backend
   // baseUrl: 'https://register.nomoreparties.co',
 });
 
