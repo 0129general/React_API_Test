@@ -2,7 +2,7 @@
   "name": "react-around-auth",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lindakovacs.github.io/react-around-api-full",
+  "homepage": "https://lindakovacs.github.io/react-around-auth",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
