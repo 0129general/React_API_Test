@@ -11,6 +11,7 @@ This repository contains the full API of "Around the U.S." project that features
 - Server IP: 20.83.184.10
 - Front-end: https://lkovacs.students.nomoreparties.site/
 - Back-end/Api: https://api.lkovacs.students.nomoreparties.site/
+- GitHub Pages: https://lindakovacs.github.io/react-around-auth
 
 # Links TBD
 * Link to repository with the complete React application which uses this API;
